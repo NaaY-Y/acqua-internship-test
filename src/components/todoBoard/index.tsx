@@ -2,31 +2,42 @@
 
 import { useDragAndDrop } from '@formkit/drag-and-drop/react';
 import SmartBar from '@/components/smartBar';
-
-const TODO_ITEMS = [
-  'AI Fish or Phish',
-  'Compile Coral DB',
-  'AI Sub Navigation',
-  'Server Water Cooling',
-  'Whale Song AI',
-  'Marine Chatbot',
-];
-
-const DONE_ITEMS = ['Dolphin Comm Sim'];
+import useStore from './store';
+import { useEffect } from 'react'; // adjust the path as necessary
 
 export default function TodoBoard() {
-  const [todoList, todoItems, setTodoItems] = useDragAndDrop<
+  // Extract the store values
+  const { todoItems, doneItems, setTodoItems, setDoneItems } = useStore();
+
+  // Call with the initial values extracted from the storee
+  const [todoList, todoItemsDrag, updateTodoItems] = useDragAndDrop<
     HTMLUListElement,
     string
-  >(TODO_ITEMS, {
+  >(todoItems, {
     group: 'todoList',
   });
-  const [doneList, doneItems, setDoneItems] = useDragAndDrop<
+  const [doneList, doneItemsDrag, updateDoneItems] = useDragAndDrop<
     HTMLUListElement,
     string
-  >(DONE_ITEMS, {
+  >(doneItems, {
     group: 'todoList',
   });
+
+  // Detect whenever a change is made to todoItemsDrag or setTodoItems
+  useEffect(() => {
+    // Update if needed
+    if (todoItems !== todoItemsDrag) {
+      setTodoItems(todoItemsDrag);
+    }
+  }, [todoItemsDrag, setTodoItems]);
+
+  // Detect whenever a change is made to doneItemsDrag or setDoneItems
+  useEffect(() => {
+    // Update if needed
+    if (doneItems !== doneItemsDrag) {
+      setDoneItems(doneItemsDrag);
+    }
+  }, [doneItemsDrag, setDoneItems]);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-acqua-soft-white">
@@ -34,17 +45,17 @@ export default function TodoBoard() {
         Acqua Board
       </h1>
       <SmartBar
-        todoItems={todoItems}
-        doneItems={doneItems}
-        setTodoItems={setTodoItems}
-        setDoneItems={setDoneItems}
+        todoItems={todoItemsDrag}
+        doneItems={doneItemsDrag}
+        setTodoItems={updateTodoItems}
+        setDoneItems={updateDoneItems}
       />
       <div className="flex justify-center items-start gap-8 p-5">
         <ul
           ref={todoList}
           className="bg-acqua-yellow rounded-lg p-4 shadow-md w-80 h-96"
         >
-          {todoItems.map((todo) => (
+          {todoItemsDrag.map((todo) => (
             <li className="p-2 bg-white rounded-lg shadow mb-2" key={todo}>
               {todo}
             </li>
@@ -54,7 +65,7 @@ export default function TodoBoard() {
           ref={doneList}
           className="bg-acqua-darker-blue rounded-lg p-4 shadow-md w-80 text-white h-96"
         >
-          {doneItems.map((done) => (
+          {doneItemsDrag.map((done) => (
             <li
               className="p-2 rounded-lg line-through decoration-acqua-retro-yellow decoration-2 shadow mb-2"
               key={done}
