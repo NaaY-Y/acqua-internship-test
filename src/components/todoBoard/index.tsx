@@ -23,7 +23,7 @@ export default function TodoBoard() {
     group: 'todoList',
   });
 
-  // Detect whenever a change is made to todoItemsDrag or setTodoItems
+  // Detect whenever a change is made to todoItemsDrag
   useEffect(() => {
     // Update if needed
     if (todoItems !== todoItemsDrag) {
@@ -31,7 +31,7 @@ export default function TodoBoard() {
     }
   }, [todoItemsDrag]);
 
-  // Detect whenever a change is made to doneItemsDrag or setDoneItems
+  // Detect whenever a change is made to doneItemsDrag
   useEffect(() => {
     // Update if needed
     if (doneItems !== doneItemsDrag) {

@@ -23,12 +23,15 @@ export default function SmartBar({
 
     //const wantedItemInTodo = todoItems.find((item) => item === value);
     //const wantedItemInDone = doneItems.find((item) => item === value);
+    // Find the best match
     const bestChoice = findBestMatch(todoItems.concat(doneItems), value);
 
     if (todoItems.includes(bestChoice)) {
+      // If the best choice is in the todoItems, move it to doneItems
       setDoneItems((prev) => [...prev, bestChoice]);
       setTodoItems((prev) => prev.filter((item) => item !== bestChoice));
     } else if (doneItems.includes(bestChoice)) {
+      // If the best choice is in the doneItems, move it to todoItems
       setTodoItems((prev) => [...prev, bestChoice]);
       setDoneItems((prev) => prev.filter((item) => item !== bestChoice));
     } else {
