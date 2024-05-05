@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { MdOutlineWaterDrop } from 'react-icons/md';
+import findBestMatch from '@/components/smartBar/smarBarAlgo';
 
 interface SmartBarProps {
   setTodoItems: Dispatch<SetStateAction<string[]>>;
@@ -17,18 +18,19 @@ export default function SmartBar({
   const [error, setError] = useState(false);
   const [value, setValue] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (value === '') return;
 
-    const wantedItemInTodo = todoItems.find((item) => item === value);
-    const wantedItemInDone = doneItems.find((item) => item === value);
+    //const wantedItemInTodo = todoItems.find((item) => item === value);
+    //const wantedItemInDone = doneItems.find((item) => item === value);
+    const bestChoice = findBestMatch(todoItems.concat(doneItems), value);
 
-    if (wantedItemInTodo) {
-      setDoneItems((prev) => [...prev, wantedItemInTodo]);
-      setTodoItems((prev) => prev.filter((item) => item !== wantedItemInTodo));
-    } else if (wantedItemInDone) {
-      setTodoItems((prev) => [...prev, wantedItemInDone]);
-      setDoneItems((prev) => prev.filter((item) => item !== wantedItemInDone));
+    if (todoItems.includes(bestChoice)) {
+      setDoneItems((prev) => [...prev, bestChoice]);
+      setTodoItems((prev) => prev.filter((item) => item !== bestChoice));
+    } else if (doneItems.includes(bestChoice)) {
+      setTodoItems((prev) => [...prev, bestChoice]);
+      setDoneItems((prev) => prev.filter((item) => item !== bestChoice));
     } else {
       setError(true);
     }

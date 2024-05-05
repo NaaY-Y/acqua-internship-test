@@ -6,7 +6,7 @@ import useStore from './store';
 import { useEffect } from 'react'; // adjust the path as necessary
 
 export default function TodoBoard() {
-  // Extract the store values
+  // Extract the stored values
   const { todoItems, doneItems, setTodoItems, setDoneItems } = useStore();
 
   // Call with the initial values extracted from the storee
@@ -29,7 +29,7 @@ export default function TodoBoard() {
     if (todoItems !== todoItemsDrag) {
       setTodoItems(todoItemsDrag);
     }
-  }, [todoItemsDrag, setTodoItems]);
+  }, [todoItemsDrag]);
 
   // Detect whenever a change is made to doneItemsDrag or setDoneItems
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function TodoBoard() {
     if (doneItems !== doneItemsDrag) {
       setDoneItems(doneItemsDrag);
     }
-  }, [doneItemsDrag, setDoneItems]);
+  }, [doneItemsDrag]);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-acqua-soft-white">
